@@ -1,3 +1,5 @@
+/* управление pid-файлом */
+
 #include <stdio.h> 
 #include <string.h> 
 #include <sys/stat.h>
@@ -16,7 +18,7 @@
 char *PID_FILE = "/var/run/reader.pid";
 
 int  set_pid() {
-	FILE *pid_file = fopen(PID_FILE,"w+");
+	FILE *pid_file = fopen(PID_FILE,"w");
 	if(pid_file) 	{
 		fprintf(pid_file, "%u", getpid());
 		fclose(pid_file);
@@ -26,12 +28,12 @@ int  set_pid() {
 }
 
 unsigned int get_pid() {
-	FILE *pid_file = fopen(PID_FILE,"r+");
+	FILE *pid_file = fopen(PID_FILE,"r");
 	unsigned int pid;
 	if(pid_file) 	{
 		fscanf(pid_file, "%u", &pid);
 		fclose(pid_file);
-		return 0;
+		return pid;
 	}
 	return 0;
 }

@@ -37,6 +37,6 @@ void authdaemon(void)
 
 void *work_thread(void *th_args) {
 	while(1){
-
+		
 	}
 }
