@@ -16,6 +16,7 @@
 #include <resolv.h>
 #include <errno.h>
 
+
 #include "service.h"
 #include "authdaemon.h"
 
@@ -23,13 +24,16 @@
 void print_help(void);
 void print_error(char*);
 
+
 // Точка входа приложения
 int main(int argc, char* argv[]) {
 
 	// проверяем на root
 	if(getuid() != 0){
 		print_error("You should run daemon as root");
+
 		return 1;
+
 	}
 
 	
@@ -48,6 +52,7 @@ int main(int argc, char* argv[]) {
 			return 0;
 		}
 
+<<<<<<< HEAD
 		else if( strcmp(argv[1],"--stop") == 0) {
 			unsigned int pid = get_pid();
 			kill(pid, SIGTERM);
@@ -63,14 +68,18 @@ int main(int argc, char* argv[]) {
 
 			// проверяем наличие файла блокировки
 			if( get_pid() != 0) {
+
 				print_error("Daemon is already running.");
+
 				return 1;
 			}
 			
 			// форк, stdio & stdout & sterr > /dev/null, рабочий каталог - /
 
 			pid = daemon(1,1);
+
 			set_pid(pid);
+
 			//!! с этого момента управление у дочернего процесса
 
 			if(pid == -1) {
@@ -102,4 +111,5 @@ void print_help() {
 
 void print_error(char *error) {
 	printf("[ERROR]\t%s\n",error);
+
 }

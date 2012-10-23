@@ -1,4 +1,5 @@
 CC = gcc
+<<<<<<< HEAD
 DEBUGGER = gdb
 BUILD_DIR = build
 TARGET = reader
@@ -21,3 +22,4 @@ debug_start: debug
 
 debug_stop: debug
 	sudo $(DEBUGGER) --args $(BUILD_DIR)/$(TARGET) --stop
+

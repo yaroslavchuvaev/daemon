@@ -13,8 +13,6 @@
 #include <errno.h>
 
 
-
-
 void authdaemon(void)
 {
 	/*int sock = socket(AF_UNIX,SOCK_STREAM,IPPROTO_TCP);
@@ -27,3 +25,4 @@ void authdaemon(void)
 	}
 	
 }
+

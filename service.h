@@ -1,4 +1,6 @@
+
 /* управление pid-файлом и логами*/
+
 
 #include <stdio.h> 
 #include <string.h> 
@@ -42,9 +44,11 @@ int unset_pid() {
 	return 0;
 }
 
+
 void write_log(char *) {
 
 }
+
 
 
 
