@@ -21,9 +21,9 @@ void authdaemon(void)
 	if(socket < 0) {
 		write_log("socket error");
 		__exit(1);
-	}
+	}*/
 	while(1){
 		
-	}*/
+	}
 	
 }
