@@ -1,5 +1,4 @@
 CC = gcc
-<<<<<<< HEAD
 DEBUGGER = gdb
 BUILD_DIR = build
 TARGET = reader

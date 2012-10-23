@@ -52,7 +52,6 @@ int main(int argc, char* argv[]) {
 			return 0;
 		}
 
-<<<<<<< HEAD
 		else if( strcmp(argv[1],"--stop") == 0) {
 			unsigned int pid = get_pid();
 			kill(pid, SIGTERM);

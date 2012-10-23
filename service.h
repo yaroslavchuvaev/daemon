@@ -45,7 +45,7 @@ int unset_pid() {
 }
 
 
-void write_log(char *) {
+void write_log(char *mess) {
 
 }
 
