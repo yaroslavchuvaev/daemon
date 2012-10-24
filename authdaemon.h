@@ -36,10 +36,6 @@ int QUERY_LENGTH = 100;
 // функция рассчета хэша
 char *hash(char *input) {
 
-	FILE *f = fopen("output","w");
-	fprintf(f, "%s", input);
-	fclose(f);
-
 	// статический буфер под хэш
 	unsigned char *digest = malloc(MD5_DIGEST_LENGTH);
 	// буфер под хэшируемое значение (входная строка + ключ)
@@ -106,6 +102,7 @@ void authdaemon(void) {
 			write_log("socket read error");
 			continue;
 		}
+		buffer[bytes_read] = '\0';
 		// рассчитывем хэш
 		char *digest = hash(buffer);
 
