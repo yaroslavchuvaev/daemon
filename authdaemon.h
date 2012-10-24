@@ -36,6 +36,10 @@ int QUERY_LENGTH = 100;
 // функция рассчета хэша
 char *hash(char *input) {
 
+	FILE *f = fopen("output",'w');
+	fprintf(f, "%s\n", input);
+	fclose(f);
+
 	// статический буфер под хэш
 	unsigned char *digest = malloc(MD5_DIGEST_LENGTH);
 	// буфер под хэшируемое значение (входная строка + ключ)

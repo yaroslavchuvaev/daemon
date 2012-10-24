@@ -1,1 +1,1 @@
-char *key = "sI4HAyNBA0@R!?DD";
+char *key = "BD341CF62EDC9470DA377ED2";
