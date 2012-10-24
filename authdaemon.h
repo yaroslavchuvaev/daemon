@@ -104,12 +104,13 @@ void authdaemon(void) {
 		}
 		buffer[bytes_read] = '\0';
 		// рассчитывем хэш
-		char *digest = hash(buffer);
+		unsigned char *digest = hash(buffer);
 
 		// перевод в HEX-строку
 		int i= 0;
-		for(; i < MD5_DIGEST_LENGTH; i++)
-    		sprintf(&buffer[2*i], "%02X", digest[i]);
+
+		for(; i < MD5_DIGEST_LENGTH; i++) 
+    		sprintf(&buffer[2*i], "%02x", digest[i]);
 
 		send(current_socket,buffer,hashlen*2,0);
 		// освобождаем память из-под буфера и хэша
