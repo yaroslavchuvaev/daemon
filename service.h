@@ -15,9 +15,15 @@
 #include <sys/wait.h>
 #include <resolv.h>
 #include <errno.h>
+#include <time.h>
 
 
 char *PID_FILE = "/var/run/reader.pid";
+
+char *LOG_FILE = "/var/log/reader.log";
+
+// файл локального сокета
+char *socket_file = "/var/run/reader.socket";
 
 int  set_pid() {
 	FILE *pid_file = fopen(PID_FILE,"w");
@@ -39,6 +45,7 @@ unsigned int get_pid() {
 	}
 	return 0;
 }
+
 int unset_pid() {
 	unlink(PID_FILE);
 	return 0;
@@ -47,6 +54,17 @@ int unset_pid() {
 
 void write_log(char *mess) {
 
+	
+	FILE *log = fopen(LOG_FILE,"a");
+	time_t t = time(NULL);
+	fprintf(log, "%s--%s\n\n", asctime(localtime(&t)),mess);
+	fclose(log);
+}
+
+
+void d_exit(int status) {
+	unset_pid();
+	exit(status);
 }
 
 

@@ -14,66 +14,107 @@
 #include <errno.h>
 #include <openssl/md5.h>
 
-char *soket_file = "/var/run/reader.socket";
-char *key = "sI4HAyNBA0@R!?DD";
-
+// устанавливаем длину хэша
 #define hashlen MD5_DIGEST_LENGTH
 
 
 
+// настройки 
+
+
+// включаем файл с ключем
+#include "key.h"
+
+
+
+// длина очереди на подключение
+int QUERY_LENGTH = 100;
+
+
+
+
+// функция рассчета хэша
 char *hash(char *input) {
 
-	unsigned char digest[MD5_DIGEST_LENGTH];
-
+	// статический буфер под хэш
+	unsigned char *digest = malloc(MD5_DIGEST_LENGTH);
+	// буфер под хэшируемое значение (входная строка + ключ)
 	int len = strlen(input)+strlen(key);
 	char *str = malloc(len+1);
-
 	strcpy(str,input);
 	strcat(str,key);
-	MD5(str,len,digest)
 
+	// получаем хэш
+	MD5(str,len,digest);
+	// очищаем память
 	free (str);
 	return digest;
 }
 
+// функция, которая собственно реализует логику работы демона
+
 void authdaemon(void) {
 
-	sleep(60);
-	int sock = socket(AF_UNIX,SOCK_STREAM,IPPROTO_TCP);
+
+	// создаем локальный сокет
+	int sock = socket(AF_UNIX,SOCK_STREAM,0);
+
+	// записываем лог об ошибке
 	if(sock < 0) {
 		write_log("socket error");
-		exit(1);
+		d_exit(1);
 	}
-	struct sockaddr sa;
-	sa.sa_family = AF_UNIX;
-	strcpy(sa.sa_data,soket_file);
+	write_log("socket created");
+
+	// указываем "сетевой" адрес
+	struct sockaddr_un sa;
+	sa.sun_family = AF_UNIX;
+	strcpy(sa.sun_path,socket_file);
+
+	// привязка сокета
 	int res = bind(sock,&sa,
-		strlen(sa.sa_data) + sizeof(sa.sa_family));
+		strlen(sa.sun_path) + sizeof(sa.sun_family));
 	if(res<0){
 		write_log("socket bind error");
-		exit(1);
+		d_exit(1);
 	}
+	write_log("soket binded");
 
-	listen(sock,100);
+	// установка сокета на прослушивание
+	listen(sock,QUERY_LENGTH);
 
+	// запускаем цикл обработки
 	while(1){
+		// достаем из очереди сокет подключения
 		int current_socket = accept(sock,NULL,NULL);
-		if(current_socket<1){
+		if(current_socket<0){
 			write_log("socket accept error");
 			continue;
 		}	
+
+		// буфер под входную строку
 		char *buffer = malloc(2048);
 
+		// считываем данные
 		int bytes_read = recv(current_socket,buffer,2048,0);
 		if(bytes_read <=0) {
 			free(buffer);
 			write_log("socket read error");
 			continue;
 		}
-		send(current_socket,hash(buffer),hashlen,0);
+		// рассчитывем хэш
+		char *digest = hash(buffer);
 
+		// перевод в HEX-строку
+		int i= 0;
+		for(; i < MD5_DIGEST_LENGTH; i++)
+    		sprintf(&buffer[2*i], "%02X", digest[i]);
+
+		send(current_socket,buffer,hashlen*2,0);
+		// освобождаем память из-под буфера и хэша
 		free(buffer);
-
+		free(digest);
+		// закрываем текущее подключение
 		close(current_socket);
 
 

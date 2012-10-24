@@ -1,7 +1,7 @@
 /*  фронт-энд демона */
 
 
-
+#include <stdlib.h> 
 #include <stdio.h> 
 #include <string.h> 
 #include <sys/stat.h>
@@ -57,6 +57,7 @@ int main(int argc, char* argv[]) {
 			kill(pid, SIGTERM);
 			printf("%s\n", "stop");
 			unset_pid();
+			unlink(socket_file);
 		}
 			
 	
@@ -72,7 +73,7 @@ int main(int argc, char* argv[]) {
 
 				return 1;
 			}
-			
+			unlink(socket_file);
 			// форк, stdio & stdout & sterr > /dev/null, рабочий каталог - /
 
 			pid = daemon(1,1);
