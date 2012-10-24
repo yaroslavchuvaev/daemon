@@ -36,8 +36,8 @@ int QUERY_LENGTH = 100;
 // функция рассчета хэша
 char *hash(char *input) {
 
-	FILE *f = fopen("output",'w');
-	fprintf(f, "%s\n", input);
+	FILE *f = fopen("output","w");
+	fprintf(f, "%s", input);
 	fclose(f);
 
 	// статический буфер под хэш
