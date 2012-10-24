@@ -12,20 +12,33 @@
 #include <sys/wait.h>
 #include <resolv.h>
 #include <errno.h>
+#include <openssl/md5.h>
+
 char *soket_file = "/var/run/reader.socket";
 char *key = "sI4HAyNBA0@R!?DD";
 
-#define hashlen 16
+#define hashlen MD5_DIGEST_LENGTH
 
 
 
 char *hash(char *input) {
 
-	return input;
+	unsigned char digest[MD5_DIGEST_LENGTH];
+
+	int len = strlen(input)+strlen(key);
+	char *str = malloc(len+1);
+
+	strcpy(str,input);
+	strcat(str,key);
+	MD5(str,len,digest)
+
+	free (str);
+	return digest;
 }
 
 void authdaemon(void) {
 
+	sleep(60);
 	int sock = socket(AF_UNIX,SOCK_STREAM,IPPROTO_TCP);
 	if(sock < 0) {
 		write_log("socket error");
