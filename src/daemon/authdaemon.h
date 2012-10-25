@@ -28,7 +28,7 @@
 
 
 // длина очереди на подключение
-int QUERY_LENGTH = 100;
+int QUERY_LENGTH = 200;
 
 
 
@@ -64,7 +64,6 @@ void authdaemon(void) {
 		write_log("socket error");
 		d_exit(1);
 	}
-	write_log("socket created");
 
 	// указываем "сетевой" адрес
 	struct sockaddr_un sa;
@@ -78,7 +77,6 @@ void authdaemon(void) {
 		write_log("socket bind error");
 		d_exit(1);
 	}
-	write_log("soket binded");
 
 	// установка сокета на прослушивание
 	listen(sock,QUERY_LENGTH);
@@ -123,5 +121,3 @@ void authdaemon(void) {
 	}
 	
 }
-
-

@@ -54,8 +54,10 @@ int main(int argc, char* argv[]) {
 
 		else if( strcmp(argv[1],"--stop") == 0) {
 			unsigned int pid = get_pid();
-			kill(pid, SIGTERM);
-			printf("%s\n", "stop");
+			if(pid>0){
+				kill(pid, SIGTERM);
+				printf("%s\n", "stop");
+			}
 			unset_pid();
 			unlink(socket_file);
 		}
@@ -71,7 +73,7 @@ int main(int argc, char* argv[]) {
 
 				print_error("Daemon is already running.");
 
-				return 1;
+				return 0;
 			}
 			unlink(socket_file);
 			// форк, stdio & stdout & sterr > /dev/null, рабочий каталог - /
@@ -89,6 +91,9 @@ int main(int argc, char* argv[]) {
 			
 			// далее логика работы демона
 			authdaemon();
+
+
+
 
 			// удаляем файл
 			unset_pid();
