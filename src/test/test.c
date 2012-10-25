@@ -9,7 +9,7 @@ int main (int argc, char* argv[])
     
 
     while(1)
-    	system("php build/test/test.php");printf("\n");
+    	system("php build/test/test.php");
  
  	MPI_Barrier(MPI_COMM_WORLD);
     MPI_Finalize();
